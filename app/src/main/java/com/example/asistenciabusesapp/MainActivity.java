@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     public HashMap<Integer, String> alumnos = new HashMap<Integer, String>();
     public Context context = MainActivity.this;
     public int contador = 0;
+    public int bach = 1;
+    public ArrayList<String> listaAlumnos = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,43 +57,55 @@ public class MainActivity extends AppCompatActivity {
             message = extras.getString("Valor");
         }
         lista = findViewById(R.id.lista);
-        lista.setText(message);
+        lista.setText(message+"\nTotal: "+contador);
     }
 
 
 
     public void añadirVoid(View view) {
-        Integer numero = Integer.parseInt(et.getText().toString());
-        if(numero > alumnos.size()){
+        if(et.getText().toString().isEmpty()){
             new AlertDialog.Builder(this)
                     .setTitle("Error")
-                    .setMessage("Este numero no se encuentra en la lista")
+                    .setMessage("No ha escrito ningún numero")
                     .setPositiveButton(android.R.string.yes,null)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
         }else{
-            String nombre = alumnos.get(numero);
-            if(message.contains(nombre)){
+            Integer numero = Integer.parseInt(et.getText().toString());
+            if(numero > alumnos.size()){
                 new AlertDialog.Builder(this)
                         .setTitle("Error")
-                        .setMessage("Alumno ya añadido")
-                        .setPositiveButton("Buscar el nombre", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                startActivity(new Intent(context, BuscarAlumno.class));
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, null)
+                        .setMessage("Este numero no se encuentra en la lista")
+                        .setPositiveButton(android.R.string.yes,null)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
             }else{
-                message = message+"\n"+numero+": "+ nombre;
-                Toast.makeText(this, nombre+" añadido", Toast.LENGTH_SHORT).show();
-                et.setText("");
-                contador++;
+                String nombre = alumnos.get(numero);
+                if(message.contains(nombre)){
+                    new AlertDialog.Builder(this)
+                            .setTitle("Error")
+                            .setMessage("Alumno ya añadido")
+                            .setPositiveButton("Buscar el nombre", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(context, BuscarAlumno.class));
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }else{
+                    message = message+"\n"+numero+": "+ nombre;
+                    listaAlumnos.add(numero+"");
+                    listaAlumnos.add(nombre);
+                    Toast.makeText(this, nombre+" añadido", Toast.LENGTH_SHORT).show();
+                    et.setText("");
+                    contador++;
+                }
             }
+            lista.setText(message+"\nTotal: "+contador);
         }
-        lista.setText(message);
+
     }
 
     public void enviarVoid(View view) {
@@ -106,11 +120,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void añadirBachillerVoid(View view) {
-        message = message+"\n Bachiller";
+        message = message+"\n Bachiller"+bach;
         Toast.makeText(this, "Alumno de bachiller añadido", Toast.LENGTH_SHORT).show();
         et.setText("");
         contador++;
-        lista.setText(message);
+        lista.setText(message+"\nTotal: "+contador);
+        listaAlumnos.add(bach+"b");
+        listaAlumnos.add("Bachiller");
+        bach++;
     }
 
     public void manualVoid(View view) {
@@ -136,6 +153,30 @@ public class MainActivity extends AppCompatActivity {
                 message = data.getExtras().getString("Return1");
             }
         }
-        lista.setText(message);
+        lista.setText(message+"\nTotal: "+contador);
+    }
+
+    public void borrarUltimoVoid(View view) {
+        if(listaAlumnos.size()==0){
+            new AlertDialog.Builder(context)
+                    .setTitle("Error")
+                    .setMessage("No ha añadido nigún alumno a la lista")
+                    .setPositiveButton(android.R.string.ok, null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }else{
+            String numero = listaAlumnos.get(listaAlumnos.size()-2);
+            String nombre = listaAlumnos.get(listaAlumnos.size()-1);
+            String numaux = numero.replace("b","");
+            if(nombre.equals("Bachiller"))
+                message = message.replace(nombre+numaux,"");
+            else
+                message = message.replace(numero+": "+ nombre,"");
+            contador--;
+            lista.setText(message+"\nTotal: "+contador);
+            Toast.makeText(this, nombre+" borrado", Toast.LENGTH_SHORT).show();
+            listaAlumnos.remove(listaAlumnos.indexOf(numero));
+            listaAlumnos.remove(listaAlumnos.indexOf(nombre));
+        }
     }
 }
