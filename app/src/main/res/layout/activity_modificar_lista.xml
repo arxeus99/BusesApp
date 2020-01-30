@@ -80,10 +80,22 @@
             android:layout_height="wrap_content"
             android:text="Lista:" />
 
-        <TextView
-            android:id="@+id/lista"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="573dp" />
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="1" >
+
+                <TextView
+                    android:id="@+id/lista"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </TableLayout>
+        </ScrollView>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

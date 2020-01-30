@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class ModificarListaActivity extends AppCompatActivity {
 
@@ -33,9 +34,12 @@ public class ModificarListaActivity extends AppCompatActivity {
         etNumero = findViewById(R.id.numero);
         tv = findViewById(R.id.lista);
         alumnos = Utils.getHashMap("Lista_Alumnos",this);
-        for(Integer i : alumnos.keySet()){
-            tv.setText(tv.getText()+"\n"+i+": "+alumnos.get(i));
+        for(Map.Entry<Integer, String> entry: alumnos.entrySet()){
+            tv.setText(tv.getText()+"\n"+entry.getKey()+": "+entry.getValue());
         }
+        /*for(Integer i : alumnos.keySet()){
+            tv.setText(tv.getText()+"\n"+i+": "+alumnos.get(i));
+        }*/
     }
 
     public void añadirAlumnoVoid(View view) {

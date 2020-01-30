@@ -15,10 +15,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class BuscarAlumno extends AppCompatActivity {
 
-    public EditText et;
+    public EditText nombreEt, numeroEt;
     public TextView tv;
     public HashMap<Integer, String> alumnos = new HashMap<Integer, String>();
 
@@ -28,15 +29,19 @@ public class BuscarAlumno extends AppCompatActivity {
         setContentView(R.layout.activity_buscar_alumno);
         alumnos = Utils.getHashMap("Lista_Alumnos",this);
 
-        et = (EditText)findViewById(R.id.nombreAlumno);
-        tv = (TextView)findViewById(R.id.numeroAlumno);
+        nombreEt = (EditText)findViewById(R.id.nombreAlumno);
+        numeroEt = (EditText)findViewById(R.id.numeroAlumno);
+        tv = (TextView)findViewById(R.id.alumno);
+        for(Map.Entry<Integer, String> entry: alumnos.entrySet()){
+            tv.setText(tv.getText()+"\n"+entry.getKey()+": "+entry.getValue());
+        }
     }
 
     public void buscarVoid(View view) {
-        String nombre = et.getText().toString();
+        String nombre = nombreEt.getText().toString();
         for(Integer i : alumnos.keySet()){
             if(alumnos.get(i).equals(nombre)){
-                tv.setText(tv.getText()+" "+i);
+                tv.setText(i+"");
             }
         }
     }
